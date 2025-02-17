@@ -1,2 +1,2 @@
 # onurbarut.github.io
-My Github Page is still under construction ....
+Reach out to my page at [onurbarut.github.io](https://onurbarut.github.io)
