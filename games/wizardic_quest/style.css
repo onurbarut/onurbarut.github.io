@@ -1,0 +1,15 @@
+body { background:#111; color:#eee; font-family: monospace; margin:0; overflow:hidden; }
+#game { image-rendering: pixelated; background:#182818; display:block; width:100vw; height:100vh; outline:0; }
+#ui { position:fixed; left:8px; top:8px; background:rgba(0,0,0,0.55); padding:6px 8px; font-size:12px; width:220px; border:1px solid #333; transition: opacity .15s, transform .15s; }
+#ui.minimized { opacity:0.3; transform:translateY(-4px); pointer-events:auto; }
+#ui.minimized #questPanel, #ui.minimized #inventory, #ui.minimized #completeDaily, #ui.minimized .links, #ui.minimized #statsExtra { display:none; }
+#stats { margin-bottom:4px; }
+#questPanel, #inventory { background:#101710; padding:4px; margin:4px 0; border:1px solid #233; min-height:40px; }
+button { background:#333; color:#eee; border:1px solid #555; padding:4px 8px; cursor:pointer; width:100%; }
+button:hover { background:#444; }
+.item { display:inline-block; padding:2px 4px; margin:2px; border:1px solid #555; cursor:pointer; background:#222; }
+.item.essence { padding:2px 2px; }
+.item.essence img { display:block; }
+.quest { margin:2px 0; }
+#uiToggle { position:absolute; right:4px; top:4px; background:#222; border:1px solid #555; font-size:10px; width:auto; padding:2px 6px; }
+#uiToggle:hover { background:#333; }

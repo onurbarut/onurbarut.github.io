@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Wizardic Quest - Monsters</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="style.css" />
+<style>
+ body { overflow:auto; }
+ .wrap { max-width:900px; margin:40px auto 80px; padding:0 20px; }
+ h1 { font-size:40px; margin:0 0 4px; }
+ table { width:100%; border-collapse:collapse; font-size:13px; }
+ th, td { border:1px solid #233; padding:6px 8px; text-align:left; }
+ th { background:#1c252c; }
+ tr:nth-child(even) td { background:#141c18; }
+ .tag { display:inline-block; padding:2px 6px; background:#244; border-radius:4px; font-size:10px; margin-right:4px; }
+ .lvl1 { background:#264; } .lvl2 { background:#463; } .lvl3 { background:#642; }
+ a { color:#9cf; }
+ .nav { margin:10px 0 30px; }
+ .note { font-size:11px; color:#888; margin-top:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav"><a href="index.html">Home</a> | <a href="game.html">Play</a></div>
+  <h1>Monster Compendium</h1>
+  <p style="max-width:640px; line-height:1.4;">An at-a-glance reference of currently implemented enemy tiers. Stats shown are base spawn values before any future dynamic scaling systems (waves, difficulty modifiers) are applied.</p>
+  <table id="monsterTable">
+    <thead>
+      <tr>
+        <th>Level</th><th>Type</th><th>HP</th><th>ATK</th><th>Armor</th><th>Move Speed</th><th>Atk Speed (frames)</th><th>Range</th><th>XP Reward</th><th>Gold</th><th>Essence %</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <div class="note">Attack Speed = frames between attacks (lower = faster). Essence % = independent chance per kill to drop one Essence.</div>
+</div>
+<script type="module">
+import { createMonster } from './monsters.js';
+// Generate sample rows by instantiating (without adding to state)
+const tbody = document.querySelector('#monsterTable tbody');
+// Force deterministic sampling of core tiers & both archetypes for table clarity
+const showcase = [];
+function sample(filter){
+  let attempts=0; while(showcase.length<20 && attempts<500){ const m=createMonster(); attempts++; if(filter(m)) showcase.push(m); }
+}
+// Ensure at least one melee & ranged for each level 1-3
+for(let lvl=1; lvl<=3; lvl++){
+  sample(m=>m.level===lvl && m.type==='melee' && !showcase.find(x=>x.level===lvl && x.type==='melee'));
+  sample(m=>m.level===lvl && m.type==='ranged' && !showcase.find(x=>x.level===lvl && x.type==='ranged'));
+}
+// Remove duplicates beyond first pair per level for cleanliness
+const rows = showcase.filter((m,i,arr)=> i===arr.findIndex(o=>o.level===m.level && o.type===m.type));
+rows.sort((a,b)=> a.level-b.level || a.type.localeCompare(b.type));
+for(const m of rows){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><span class="tag lvl${m.level}">L${m.level}</span></td>
+  <td>${m.type}</td>
+  <td>${m.maxHp}</td>
+  <td>${m.atk}</td>
+  <td>${m.armor.toFixed(2)}</td>
+  <td>${m.moveSpeed.toFixed(2)}</td>
+  <td>${m.attackSpeed}</td>
+  <td>${m.attackRange}</td>
+  <td>${m.xpReward}</td>
+  <td>${m.goldReward}</td>
+  <td>${Math.round(m.essenceChance*100)}%</td>`;
+  tbody.appendChild(tr);
+}
+</script>
+</body>
+</html>

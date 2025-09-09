@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Wizardic Quest</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  body { overflow:auto !important; }
+  .landing-wrapper { max-width:760px; margin:42px auto; padding:0 22px 80px; }
+  h1 { font-size:48px; margin:0 0 12px; line-height:1; background:linear-gradient(90deg,#7fffd4,#4da6ff,#c19bff); -webkit-background-clip:text; color:transparent; }
+  .tagline { font-size:18px; color:#ccc; margin-bottom:28px; }
+  .cta { display:inline-block; background:#4da6ff; color:#111; padding:16px 34px; font-size:20px; text-decoration:none; font-weight:bold; border-radius:8px; box-shadow:0 0 0 2px #1a3a55 inset, 0 8px 18px -6px #000; transition:.2s background; }
+  .cta:hover { background:#70c0ff; }
+  .nav-links a { color:#9cf; margin-left:18px; text-decoration:none; font-size:14px; }
+  .feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:22px; margin:46px 0 10px; }
+  .card { background:#1a1f1a; padding:16px 16px 20px; border:1px solid #243; border-radius:8px; min-height:170px; position:relative; box-shadow:0 2px 6px #000 inset; }
+  .card h3 { margin:0 0 10px; font-size:17px; color:#9cf; }
+  footer { margin:70px 0 40px; font-size:12px; color:#555; text-align:center; }
+  .play-strip { background:#162116; padding:34px 24px 38px; border:1px solid #233; border-radius:10px; text-align:center; box-shadow:0 0 24px -8px #000 inset; }
+  .play-strip p { margin:0 0 22px; font-size:20px; }
+</style>
+</head>
+<body>
+<div class="landing-wrapper">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <div style="font-size:14px; letter-spacing:1px; color:#6ac;">v0.1 Prototype</div>
+    <div class="nav-links">
+      <a href="monsters.html">Monsters</a>
+      <a href="game.html">Play</a>
+      <a href="README.md" target="_blank" rel="noopener">Docs</a>
+    </div>
+  </div>
+  <h1>Wizardic Quest</h1>
+  <div class="tagline">A tiny retro arena roguelite prototype. Level up, forge stats from Essence, and outlast adaptive monsters.</div>
+  <div class="play-strip">
+    <p>Ready to enter the arena?</p>
+    <a class="cta" href="game.html">Play Now</a>
+  </div>
+  <div class="feature-grid">
+    <div class="card"><h3>Procedural Map</h3><p>Fresh tile layout every session for fast iteration and replayable testing.</p></div>
+    <div class="card"><h3>Stat Growth</h3><p>HP, Attack, Armor, Move Speed & Attack Speed scale via levels & forging.</p></div>
+    <div class="card"><h3>Daily Quests</h3><p>Short task loop: kill, collect, reach – for bonus XP & gold each day.</p></div>
+    <div class="card"><h3>Forging System</h3><p>Convert dropped Essence into permanent (session) stat boosts.</p></div>
+    <div class="card"><h3>Enemy Variety</h3><p>Melee chargers & ranged casters with tiered scaling & different tempos.</p></div>
+    <div class="card"><h3>Lightweight Code</h3><p>Pure ES Modules & Canvas. No build step. Easy to fork & extend.</p></div>
+  </div>
+  <footer>
+    Wizardic Quest Prototype &copy; 2025. MIT Licensed. <br>
+    <a href="monsters.html" style="color:#7abaff;">Monster Compendium</a> • <a style="color:#7abaff;" href="game.html">Jump In</a>
+  </footer>
+</div>
+</body>
+</html>

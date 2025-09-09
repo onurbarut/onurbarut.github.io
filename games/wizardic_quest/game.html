@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Wizardic Quest - Game</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  #loadStatus { position:fixed; left:0; top:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:#0a0f0a; color:#9cf; font:16px monospace; z-index:999; }
+  #loadStatus.error { background:#200; color:#f99; white-space:pre-line; padding:40px; }
+</style>
+</head>
+<body>
+<div id="loadStatus">Loading game...</div>
+<canvas id="game"></canvas>
+<div id="ui">
+  <button id="uiToggle" title="Toggle UI (U)">–</button>
+  <div id="stats">
+    <span id="level">Lv 1</span> | XP: <span id="xp">0</span>/<span id="xpMax">10</span> | Gold: <span id="gold">0</span>
+  </div>
+  <div id="questPanel"></div>
+  <div id="inventory"></div>
+  <button id="completeDaily">Complete Daily (Debug)</button>
+  <div class="links" style="margin-top:6px; font-size:11px;">
+    <a href="index.html" style="color:#9cf;">Home</a> |
+    <a href="monsters.html" style="color:#9cf;">Monsters</a>
+  </div>
+</div>
+<script>
+// Detect common file:// ES module restriction and show hint before module load
+(function(){
+  if(location.protocol==='file:'){
+    // Some browsers block deep module graph on file://; show quick hint after short delay if nothing hides loader
+    setTimeout(()=>{
+      const ls=document.getElementById('loadStatus');
+      if(ls && !window.__WQ_FIRST_FRAME){
+        ls.classList.add('error');
+        ls.textContent='If the game does not start, run a local server:\npython3 -m http.server 8080 (in webgame folder)\nThen open http://localhost:8080/game.html';
+      }
+    },1200);
+  }
+})();
+</script>
+<script type="module">
+import { genMap } from './map.js';
+import { state } from './state.js';
+import { ensureMonsters, updateMonsters } from './monsters.js';
+import { resetDailies, renderQuests, tickQuests, maybeRenderQuests } from './quests.js';
+import { renderInventory } from './inventory.js';
+import { updateStatsUI } from './progress.js';
+import { playerMovement, setupInput } from './player.js';
+import { shootSpell } from './projectiles.js';
+import { updateProjectiles } from './combat.js';
+import { draw } from './render.js';
+import * as C from './constants.js';
+// Fallback definitions (were missing -> ReferenceError)
+const SHOP_CX = C.SHOP_CENTER_X ?? 80;
+const SHOP_CY = C.SHOP_CENTER_Y ?? 80;
+const SHOP_RADIUS = C.SHOP_INTERACT_RADIUS ?? 60;
+
+// Remove any prior usages of SHOP_CENTER_X etc that may be cached
+
+const canvas=document.getElementById('game'); const ctx=canvas.getContext('2d');
+function resizeCanvas(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+window.addEventListener('resize', resizeCanvas); resizeCanvas();
+setupInput(canvas, shootSpell);
+
+const ui=document.getElementById('ui');
+const uiToggle=document.getElementById('uiToggle');
+function toggleUI(){ ui.classList.toggle('minimized'); uiToggle.textContent = ui.classList.contains('minimized')? '+' : '–'; }
+uiToggle.addEventListener('click', toggleUI);
+window.addEventListener('keydown', e=>{ if(e.key==='u' || e.key==='U') toggleUI(); });
+
+// Move UI behind pointer events when minimized but still clickable on button
+ui.addEventListener('mouseenter', ()=>{ if(ui.classList.contains('minimized')) ui.style.opacity=0.6; });
+ui.addEventListener('mouseleave', ()=>{ if(ui.classList.contains('minimized')) ui.style.opacity=''; });
+
+document.getElementById('completeDaily').addEventListener('click', ()=>{ state.dailyQuests.forEach(q=>{ if(!q.dynamic) q.progress=q.target; }); renderQuests(); });
+
+try {
+  resetDailies();
+  genMap();
+  renderQuests();
+  renderInventory();
+  updateStatsUI();
+} catch(e){
+  const ls=document.getElementById('loadStatus'); if(ls){ ls.classList.add('error'); ls.textContent='Init error: '+e.message; }
+  throw e;
+}
+
+const shop = { x: SHOP_CX, y: SHOP_CY, radius: SHOP_RADIUS };
+const shopPanel = document.createElement('div');
+shopPanel.id='shopPanel';
+shopPanel.style.position='fixed'; shopPanel.style.right='8px'; shopPanel.style.top='8px'; shopPanel.style.background='rgba(0,0,0,0.6)'; shopPanel.style.padding='6px 8px'; shopPanel.style.border='1px solid #333'; shopPanel.style.font='12px monospace'; shopPanel.style.display='none';
+shopPanel.innerHTML='<b>Shop</b><br><button id="buyPotion">Buy Potion (5g)</button><br><button id="forgeHp">Forge 3 Essence -> +1 Max HP</button><br><button id="forgeAtk">Forge 3 Essence -> +1 ATK</button>';
+document.body.appendChild(shopPanel);
+
+function tryShowShop(){
+  const dx = state.player.x - shop.x; const dy = state.player.y - shop.y; const dist = Math.hypot(dx,dy);
+  shopPanel.style.display = (!state.player.dead && dist < shop.radius) ? 'block' : 'none';
+}
+
+document.addEventListener('click', e=>{
+  if(e.target && e.target.id==='buyPotion'){
+    if(state.player.gold>=5){ state.player.gold-=5; state.player.hp = Math.min(state.player.maxHp, state.player.hp + 5); updateStatsUI(); }
+  } else if(e.target && e.target.id==='forgeHp'){
+    const essCount = state.player.items.filter(i=>i==='Essence').length;
+    if(essCount>=3){
+      let spent=0; state.player.items = state.player.items.filter(i=>{ if(i==='Essence' && spent<3){ spent++; return false;} return true; });
+      state.player.maxHp += 1; state.player.hp = state.player.maxHp;
+      state.floatingTexts.push({x:state.player.x,y:state.player.y-22,text:'+1 Max HP',color:'#ffd700',life:70});
+      renderInventory(); updateStatsUI();
+    }
+  } else if(e.target && e.target.id==='forgeAtk'){
+    const essCount = state.player.items.filter(i=>i==='Essence').length;
+    if(essCount>=3){
+      let spent=0; state.player.items = state.player.items.filter(i=>{ if(i==='Essence' && spent<3){ spent++; return false;} return true; });
+      state.player.attack += 1;
+      state.floatingTexts.push({x:state.player.x,y:state.player.y-22,text:'+1 ATK',color:'#ff8800',life:70});
+      renderInventory(); updateStatsUI();
+    }
+  }
+});
+
+let firstFrameShown=false;
+function loop(){
+  state.time++;
+  if(state.player.dead){
+    state.player.respawnTimer--; if(state.player.respawnTimer<=0){ 
+      state.player.dead=false; 
+      state.player.hp = Math.max(1, Math.floor(state.player.maxHp*0.5));
+      const angle = Math.random()*Math.PI*2; const rad = 20 + Math.random()*20;
+      state.player.x = SHOP_CX + Math.cos(angle)*rad;
+      state.player.y = SHOP_CY + Math.sin(angle)*rad;
+    }
+  } else {
+    playerMovement();
+  }
+  ensureMonsters();
+  updateMonsters();
+  updateProjectiles();
+  tickQuests();
+  maybeRenderQuests();
+  draw(ctx, canvas);
+  tryShowShop();
+  if(!firstFrameShown){
+    firstFrameShown=true; window.__WQ_FIRST_FRAME=true; const ls=document.getElementById('loadStatus'); if(ls) ls.remove();
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+<script>
+window.addEventListener('error', e=>{
+  const ls=document.getElementById('loadStatus');
+  if(!ls) return;
+  if(window.__WQ_FIRST_FRAME) return; // already running
+  ls.classList.add('error');
+  ls.textContent='Runtime error before start:\n'+e.message+'\n(If using file:// try a local server)';
+});
+</script>
+</body>
+</html>
