@@ -1,0 +1,1138 @@
+/* ==========================================================================
+   Onur Barut — personal site
+   Design direction: "Editorial minimal, instrument-panel details"
+   Typography-led serif/sans core, hairline rules, a rust primary accent and a
+   teal secondary reserved for quantitative chrome, plus a monospace label
+   voice for indices, dates, metrics and tags.
+   Sections: hero, about, highlights, experience, skills, publications,
+             open-source, teaching, games, contact.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens
+
+   Contrast ratios (WCAG 2.1, computed against the paired background):
+
+   Alpha-tinted surfaces are composited over their parent before measuring.
+
+   LIGHT (--bg #fbfaf7)
+     --text        #1a1a18 on --bg        16.70:1   AAA body
+     --text-strong #141413 on --bg        17.66:1   AAA
+     --text-muted  #57554e on --bg         7.15:1   AAA body
+     --text-muted  #57554e on --bg-chip    6.50:1   AAA body
+     --text-faint  #6b6961 on --bg         5.27:1   AA  body
+     --text-faint  #6b6961 on --bg-chip    4.79:1   AA  body (tags on chips)
+     --text        #1a1a18 on --bg-chip   15.18:1   AAA (chips, skill chips)
+     --accent      #9a3412 on --bg         7.00:1   AAA
+     --accent-2    #115e59 on --bg         7.27:1   AAA
+     --accent-2    #115e59 on --accent-2-wash 6.53:1 AAA (metric chip text)
+     --on-accent   #ffffff on --accent     7.31:1   AAA (primary button)
+
+   DARK (--bg #131312)
+     --text        #edebe6 on --bg        15.60:1   AAA body
+     --text-strong #f5f3ef on --bg        16.78:1   AAA
+     --text-muted  #a8a59c on --bg         7.55:1   AAA body
+     --text-muted  #a8a59c on --bg-chip    6.40:1   AAA body
+     --text-faint  #939087 on --bg         5.83:1   AA  body
+     --text-faint  #939087 on --bg-chip    4.94:1   AA  body (tags on chips)
+     --text        #edebe6 on --bg-chip   13.23:1   AAA (chips, skill chips)
+     --accent      #e8956f on --bg         7.93:1   AAA
+     --accent-2    #6fd0c6 on --bg        10.19:1   AAA
+     --accent-2    #6fd0c6 on --accent-2-wash 8.52:1 AAA (metric chip text)
+     --on-accent   #131312 on --accent     7.93:1   AAA (primary button)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Type families — Google Fonts first, full system fallbacks after, so the
+     layout never depends on a webfont arriving (or on being online at all). */
+  --font-serif: "Source Serif 4", "Iowan Old Style", "Palatino Linotype",
+                Palatino, Georgia, "Times New Roman", serif;
+  --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+               Consolas, "Liberation Mono", monospace;
+
+  /* Fluid type scale (320px → 1920px) */
+  --fs-display: clamp(2.5rem, 1.35rem + 4.2vw, 4.5rem);
+  --fs-kicker: clamp(0.95rem, 0.86rem + 0.4vw, 1.15rem);
+  --fs-lead: clamp(1.1rem, 1.01rem + 0.42vw, 1.375rem);
+  --fs-h2: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+  --fs-h3: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --fs-body: 1.0625rem;
+  --fs-sm: 0.9375rem;
+  --fs-xs: 0.8125rem;
+  --fs-micro: 0.75rem;
+
+  /* Spacing scale */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+
+  /* Layout — the wrap and rail are sized so the reading measure very nearly
+     fills the content column at 1200px+, instead of stranding a dead margin. */
+  --maxw: 68rem;          /* 1088px page container */
+  --measure: 42rem;       /* comfortable reading measure (672px) */
+  --rail: 15rem;          /* sticky section-label column — wide enough for the
+                             longest section title ("Selected work", 204px with
+                             the webfont) on one line, with headroom for the
+                             fallback serif stack */
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --section-y: clamp(3rem, 5.5vw, 5.25rem);
+  --nav-h: 3.5rem;
+  --radius: 3px;          /* editorial: near-square corners */
+
+  /* Light palette (default) */
+  color-scheme: light;
+  --bg: #fbfaf7;
+  --bg-elev: #ffffff;
+  --bg-chip: #f2efe8;
+  --bg-translucent: rgba(251, 250, 247, 0.88);
+  --text: #1a1a18;
+  --text-strong: #141413;
+  --text-muted: #57554e;
+  --text-faint: #6b6961;
+  --rule: #e3dfd6;
+  --rule-strong: #cfcabf;
+  --accent: #9a3412;                        /* rust — links, CTAs, markers   */
+  --on-accent: #ffffff;
+  --accent-2: #115e59;                      /* teal — quantitative chrome    */
+  --accent-2-wash: rgba(17, 94, 89, 0.07);
+  /* Hero backdrop: a faint technical grid under two soft accent washes. */
+  --grid-line: rgba(26, 26, 24, 0.045);
+  --wash-1: rgba(154, 52, 18, 0.10);
+  --wash-2: rgba(17, 94, 89, 0.07);
+}
+
+/* Dark palette — declared twice (media query + explicit attribute) so the
+   toggle wins in both directions, whatever the OS preference is. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #131312;
+    --bg-elev: #1b1b19;
+    --bg-chip: #232320;
+    --bg-translucent: rgba(19, 19, 18, 0.88);
+    --text: #edebe6;
+    --text-strong: #f5f3ef;
+    --text-muted: #a8a59c;
+    --text-faint: #939087;
+    --rule: #2c2c29;
+    --rule-strong: #3d3c38;
+    --accent: #e8956f;
+    --on-accent: #131312;
+    --accent-2: #6fd0c6;
+    --accent-2-wash: rgba(111, 208, 198, 0.10);
+    --grid-line: rgba(237, 235, 230, 0.045);
+    --wash-1: rgba(232, 149, 111, 0.10);
+    --wash-2: rgba(111, 208, 198, 0.07);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #131312;
+  --bg-elev: #1b1b19;
+  --bg-chip: #232320;
+  --bg-translucent: rgba(19, 19, 18, 0.88);
+  --text: #edebe6;
+  --text-strong: #f5f3ef;
+  --text-muted: #a8a59c;
+  --text-faint: #939087;
+  --rule: #2c2c29;
+  --rule-strong: #3d3c38;
+  --accent: #e8956f;
+  --on-accent: #131312;
+  --accent-2: #6fd0c6;
+  --accent-2-wash: rgba(111, 208, 198, 0.10);
+  --grid-line: rgba(237, 235, 230, 0.045);
+  --wash-1: rgba(232, 149, 111, 0.10);
+  --wash-2: rgba(111, 208, 198, 0.07);
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset / base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 1.5rem);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  /* `clip` (not `hidden`) keeps position: sticky working on the header */
+  overflow-x: clip;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  color: var(--text-strong);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+p { margin: 0 0 var(--s-4); }
+p:last-child { margin-bottom: 0; }
+
+ul, ol { margin: 0; padding: 0; }
+
+a {
+  color: inherit;
+  text-decoration-color: var(--rule-strong);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+a:hover { text-decoration-color: var(--accent); }
+
+/* Links set inside running text must not rely on the hairline underline
+   alone — --rule-strong is ~1.6:1 against --bg in both palettes. */
+.bullets a,
+.pubs-note a {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* Focus ring uses the secondary accent so it never reads as a hover state on
+   the rust links and buttons it lands on. */
+:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection { background: var(--accent); color: var(--on-accent); }
+
+/* Utilities ---------------------------------------------------------------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--s-4);
+  top: -4rem;
+  z-index: 100;
+  padding: 0.7rem 1rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: top 0.15s ease;
+}
+.skip-link:focus-visible { top: 0.5rem; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Monospace micro-label — one component carries section indices, role dates,
+   repo meta and tag text, and gives the page its instrument-panel voice. */
+.micro {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   3. Header / navigation
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg-translucent);
+  border-bottom: 1px solid var(--rule);
+}
+@supports (backdrop-filter: blur(8px)) {
+  .site-header { backdrop-filter: saturate(140%) blur(10px); }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  min-height: var(--nav-h);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-decoration: none;
+  color: var(--text-strong);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding-block: 0.5rem;
+}
+.brand svg { width: 22px; height: 22px; flex: none; }
+.brand__name { font-weight: 600; }
+
+.nav__links {
+  display: none; /* revealed at ≥ 62rem; below that the disclosure panel is used */
+  list-style: none;
+  align-items: center;
+  gap: clamp(0.6rem, 1vw, 1.1rem);
+  margin: 0;
+}
+.nav__links a {
+  display: block;
+  padding: 0.4rem 0.15rem;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+}
+.nav__links a:hover { color: var(--text-strong); }
+.nav__links a[aria-current="true"] {
+  color: var(--text-strong);
+  border-bottom-color: var(--accent);
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex: none;
+}
+
+/* Icon-only square buttons — 44×44 hit area on every viewport */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.icon-btn:hover { background: var(--bg-chip); border-color: var(--rule); }
+.icon-btn svg { width: 19px; height: 19px; }
+
+/* Theme toggle shows the icon of the theme it will switch *to*, matching the
+   aria-label main.js writes ("Switch to dark theme" → moon, and vice versa). */
+.icon-btn .icon-sun { display: none; }
+.icon-btn .icon-moon { display: block; }
+:root[data-theme="dark"] .icon-btn .icon-sun { display: block; }
+:root[data-theme="dark"] .icon-btn .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .icon-btn .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .icon-btn .icon-moon { display: none; }
+}
+
+/* Hamburger ⇄ close: exactly one of the two icons is ever rendered. */
+.nav__toggle { display: inline-flex; }
+.nav__toggle .icon-menu { display: block; }
+.nav__toggle .icon-close { display: none; }
+.nav__toggle[aria-expanded="true"] .icon-menu { display: none; }
+.nav__toggle[aria-expanded="true"] .icon-close { display: block; }
+
+/* Mobile disclosure panel */
+.nav__panel {
+  border-top: 1px solid var(--rule);
+  background: var(--bg-elev);
+  /* The header is sticky, so an unbounded panel makes it taller than the
+     viewport and pins the overflow permanently out of reach. Cap it and let
+     the panel scroll inside itself instead. 100vh is the fallback for
+     browsers without dynamic viewport units. */
+  max-height: calc(100vh - var(--nav-h));
+  max-height: calc(100dvh - var(--nav-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.nav__panel ul {
+  list-style: none;
+  display: grid;
+  gap: 1px;
+  padding-block: var(--s-3);
+  margin: 0;
+}
+.nav__panel a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  font-size: var(--fs-sm);
+  color: var(--text);
+  text-decoration: none;
+}
+.nav__panel a[aria-current="true"] { color: var(--accent); }
+.nav__panel .nav__cv { color: var(--accent); font-weight: 600; }
+
+/* 62rem = 992px, so a 1024px laptop still gets the full horizontal nav. */
+@media (min-width: 62rem) {
+  .nav__links { display: flex; }
+  .nav__toggle { display: none; }
+  .nav__panel { display: none !important; }
+}
+
+/* --------------------------------------------------------------------------
+   4. Section scaffolding — sticky label rail + content column
+   -------------------------------------------------------------------------- */
+.section {
+  border-top: 1px solid var(--rule);
+  padding-block: var(--section-y);
+}
+
+.section__grid {
+  display: grid;
+  gap: var(--s-5);
+  align-items: start;
+}
+@media (min-width: 62rem) {
+  .section__grid {
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    gap: clamp(2rem, 3.5vw, 3.5rem);
+  }
+  .section__head {
+    position: sticky;
+    top: calc(var(--nav-h) + 2rem);
+  }
+}
+
+/* Never break a section title mid-word inside the narrow rail; the rail is
+   sized so the longest title fits on one line. */
+.section__title {
+  font-size: var(--fs-h2);
+  letter-spacing: -0.01em;
+  overflow-wrap: normal;
+}
+.section__index {
+  display: block;
+  color: var(--accent);
+  margin-bottom: var(--s-3);
+}
+
+.standfirst {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  max-width: var(--measure);
+  margin-bottom: var(--s-6);
+}
+
+/* --------------------------------------------------------------------------
+   5. Hero
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(2.5rem, 5vw, 4rem);
+}
+
+/* Decorative backdrop: a 72px technical grid under two soft accent washes,
+   masked out toward the bottom so it dissolves into the page. Purely
+   presentational — hidden in print, and it never sits above content. */
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px),
+    radial-gradient(46rem 30rem at 8% -10%, var(--wash-1), transparent 62%),
+    radial-gradient(38rem 26rem at 92% 8%, var(--wash-2), transparent 62%);
+  background-size: 72px 72px, 72px 72px, auto, auto;
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 45%, transparent 100%);
+}
+
+.hero__grid {
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: start;
+}
+@media (min-width: 48rem) {
+  .hero__grid { grid-template-columns: minmax(0, 1fr) 14rem; }
+}
+@media (min-width: 75rem) {
+  .hero__grid { grid-template-columns: minmax(0, 1fr) 16rem; }
+}
+
+.hero__name {
+  font-size: var(--fs-display);
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+  margin-bottom: var(--s-3);
+}
+
+.hero__kicker {
+  font-family: var(--font-sans);
+  font-size: var(--fs-kicker);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  margin: 0 0 var(--s-5);
+}
+
+.hero__lead {
+  font-family: var(--font-serif);
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--text);
+  max-width: 34rem;
+  margin-bottom: var(--s-5);
+}
+
+/* Proof chips */
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin: 0 0 var(--s-5);
+}
+.chips li {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.01em;
+  color: var(--text);
+  background: var(--bg-chip);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: 0.3rem 0.6rem;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.55rem 1.15rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn svg { width: 17px; height: 17px; flex: none; }
+.btn--primary { background: var(--accent); color: var(--on-accent); }
+.btn--primary:hover { filter: brightness(1.08); }
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  /* The border is the only affordance, so it must clear 3:1 against --bg
+     (SC 1.4.11). --rule-strong is a hairline colour: 1.57:1 / 1.68:1. */
+  border-color: var(--text-faint);
+}
+.btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Social icon row */
+.social {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  margin: 0;
+}
+.social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--text-muted);
+  border-radius: var(--radius);
+}
+.social a:hover { color: var(--accent); background: var(--bg-chip); }
+.social svg { width: 20px; height: 20px; }
+
+/* Portrait */
+.hero__portrait {
+  margin: 0;
+  max-width: 16rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-chip);
+}
+.hero__portrait img {
+  width: 100%;
+  aspect-ratio: 420 / 540;
+  object-fit: cover;
+}
+/* Below 48rem the portrait leads, so the face is in the first screen rather
+   than ~1400px below the name. DOM order keeps the <h1> first for AT.
+   The rhythm is tuned against the *visible* viewport a 390×844 iPhone
+   actually paints once the address and tab bars are up (~700px), not the
+   full 844 — the Download CV CTA is the page's main conversion and has to
+   survive browser chrome.
+   This block lives *after* the hero component rules on purpose: it used to
+   sit above them, where every same-specificity override in it (the type
+   sizes and all four margins) was silently losing on source order. */
+@media (max-width: 47.99em) {
+  .hero { padding-block: 0.75rem 1.5rem; }
+  .hero__grid { gap: 0.75rem; }
+  .hero__portrait { order: -1; max-width: 8rem; }
+  .hero__name { margin-bottom: var(--s-2); }
+  .hero__kicker { margin-bottom: var(--s-2); }
+  .hero__lead { font-size: 1rem; line-height: 1.5; margin-bottom: var(--s-3); }
+  .chips { gap: var(--s-1); margin-bottom: var(--s-3); }
+  .chips li { padding: 0.25rem 0.5rem; }
+  .actions { margin-bottom: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   6. About
+   -------------------------------------------------------------------------- */
+.about__body {
+  max-width: var(--measure);
+  font-size: clamp(1.0625rem, 1.01rem + 0.25vw, 1.1875rem);
+  line-height: 1.72;
+}
+
+/* --------------------------------------------------------------------------
+   7. Selected work — numbered editorial cards
+   auto-fit reflow: no hand-tuned breakpoints, correct from 320px to 1920px.
+   -------------------------------------------------------------------------- */
+.cards {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  counter-reset: card;
+  margin: 0;
+}
+
+.card {
+  counter-increment: card;
+  border-top: 1px solid var(--rule);
+  padding: var(--s-5) 0 var(--s-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.card::before {
+  content: counter(card, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+.card__title { font-size: var(--fs-h3); letter-spacing: -0.005em; }
+
+/* Without this the chip — the scannable unit — sits 23px lower in whichever
+   card of a row has the two-line title. Subgrid shares one set of row tracks
+   across the whole row, so counter, title, chip, body and tags all line up.
+   Browsers without subgrid keep the flex-column fallback above. */
+@supports (grid-template-rows: subgrid) {
+  .card {
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+  }
+}
+.card__body {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.62;
+  margin: 0;
+}
+
+/* The proof number is the scannable unit, so it sits directly under the title,
+   above the paragraph. Its dot is the only place the secondary accent is
+   spent inside a card. */
+.metric {
+  display: inline-flex;
+  align-self: flex-start;
+  justify-self: start;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+  color: var(--accent-2);
+  background: var(--accent-2-wash);
+  border-left: 2px solid var(--accent-2);
+  padding: 0.35rem 0.6rem;
+  max-width: 100%;
+  margin: 0;
+}
+.metric__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+  transform: translateY(-0.1em);
+}
+
+.tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+.tags li {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  color: var(--text-faint);
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+}
+
+/* --------------------------------------------------------------------------
+   8. Experience — vertical timeline
+   -------------------------------------------------------------------------- */
+.timeline { position: relative; list-style: none; margin: 0; }
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  width: 1px;
+  background: var(--rule);
+}
+
+.role { position: relative; padding: 0 0 var(--s-7) clamp(1.5rem, 3vw, 2.25rem); }
+.role:last-child { padding-bottom: 0; }
+.role::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+}
+
+.role__title { font-size: var(--fs-h3); }
+.role__org { color: var(--text-strong); }
+.role__sep { color: var(--text-faint); font-weight: 400; }
+.role__position { color: var(--text-muted); font-weight: 400; font-style: italic; }
+.role__meta {
+  letter-spacing: 0.06em;
+  margin: 0.5rem 0 0;
+}
+.role__context {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin: var(--s-3) 0 0;
+  max-width: var(--measure);
+  padding-left: var(--s-3);
+  border-left: 2px solid var(--rule-strong);
+}
+
+/* Real list markers keep list semantics intact in every screen reader. */
+.bullets {
+  list-style: disc;
+  margin: var(--s-4) 0 0;
+  padding-left: 1.15rem;
+  max-width: var(--measure);
+}
+.bullets li {
+  margin-bottom: var(--s-3);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.62;
+}
+.bullets li::marker { color: var(--accent); }
+.bullets li:last-child { margin-bottom: 0; }
+.bullets strong { color: var(--text); font-weight: 600; }
+
+/* Education block */
+.education { margin-top: var(--s-7); border-top: 1px solid var(--rule); padding-top: var(--s-5); }
+.education h3 { font-size: var(--fs-h3); margin-bottom: var(--s-4); }
+.degree { margin-bottom: var(--s-5); max-width: var(--measure); }
+.degree:last-child { margin-bottom: 0; }
+.degree h4 { font-size: 1.0625rem; margin-bottom: 0.2rem; }
+.degree p {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+.degree .award { color: var(--accent-2); font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   9. Skills — hairline rows
+   Discrete list items rather than an inline run with generated " · "
+   separators: item boundaries survive, and no punctuation is injected into
+   the accessible name. The labels are phrases (several carry a parenthetical
+   qualifier) and at every width one fills its column, so they are set as
+   compact hairline rows — which is what they render as — rather than as pills
+   pretending to be a chip cloud.
+   -------------------------------------------------------------------------- */
+.skills {
+  /* Multi-column rather than grid: grid row tracks size to the tallest group
+     in the row and leave a ragged void under every shorter one. Columns let
+     the groups pack, and break-inside keeps each group whole. */
+  columns: 19rem 2;
+  column-gap: clamp(2rem, 3.5vw, 3.5rem);
+}
+
+.skill-group { border-top: 1px solid var(--rule); padding: var(--s-4) 0 var(--s-5); break-inside: avoid; }
+.skill-group h3 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: var(--s-3);
+}
+.skill-list {
+  list-style: none;
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+.skill-list li {
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  color: var(--text-muted);
+  border-top: 1px solid var(--rule);
+  /* Every row carries the 2px edge so the text of a group stays aligned;
+     only the first one is inked. */
+  border-left: 2px solid transparent;
+  padding: 0.3rem 0 0.3rem 0.6rem;
+  overflow-wrap: anywhere;
+}
+/* First item in each group is the deepest experience — flag it with the
+   accent edge rather than with weight alone. */
+.skill-list li:first-child {
+  border-top: 0;
+  color: var(--text);
+  font-weight: 600;
+  border-left-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   10. Publications — numbered editorial list
+   -------------------------------------------------------------------------- */
+.scholar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  font-size: var(--fs-sm);
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+  margin-bottom: var(--s-5);
+  max-width: 100%;
+}
+.scholar:hover { border-bottom-color: var(--accent); color: var(--accent); }
+.scholar svg { width: 16px; height: 16px; flex: none; }
+
+.pub-legend {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--s-4);
+}
+.pub-legend .star { color: var(--accent); }
+
+.pubs { list-style: none; margin: 0; counter-reset: pub; }
+.pub {
+  counter-increment: pub;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: 0 0.75rem;
+  border-top: 1px solid var(--rule);
+  padding: var(--s-4) 0;
+}
+@media (min-width: 40rem) {
+  .pub { grid-template-columns: 3rem minmax(0, 1fr); gap: 0 1rem; }
+}
+.pub::before {
+  content: counter(pub, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--text-faint);
+  line-height: 1.9;
+}
+/* The three most-cited papers get their own surface, so the highlight survives
+   even if the ★ glyph does not render. */
+.pub--starred {
+  background: var(--bg-chip);
+  border-top-color: var(--rule-strong);
+  padding-inline: var(--s-3);
+  margin-inline: calc(var(--s-3) * -1);
+}
+.pub__title {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  line-height: 1.35;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+.pub__star { color: var(--accent); margin-right: 0.25rem; }
+.pub__meta {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.5rem;
+  align-items: baseline;
+}
+/* The separator lives inside .pub__cites rather than as its own flex item,
+   so it can never be orphaned onto a line of its own when .pub__meta wraps. */
+.pub__sep { color: var(--text-muted); font-family: var(--font-sans); }
+.pub__cites {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-2);
+  font-weight: 500;
+}
+/* ≥ 24×24px hit area (WCAG 2.2 target size) without breaking the meta line. */
+.pub__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0.15rem 0.4rem;
+  margin-inline: -0.4rem;
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+  white-space: nowrap;
+}
+
+.pubs-note { font-size: var(--fs-sm); color: var(--text-muted); margin-top: var(--s-5); }
+
+/* --------------------------------------------------------------------------
+   11. Open source
+   Capped at two columns: three would squeeze titles like
+   "Multi-Task Hierarchical Learning" onto three lines.
+   -------------------------------------------------------------------------- */
+.repos {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
+  column-gap: clamp(1.5rem, 3vw, 3rem);
+  margin: 0;
+}
+
+.repo {
+  border-top: 1px solid var(--rule);
+  padding: var(--s-4) 0 var(--s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.repo h3 { font-size: 1.0625rem; }
+.repo h3 a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  /* Standalone (non-inline) link — keep it above the 24×24 WCAG 2.2 minimum. */
+  min-height: 24px;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.repo h3 a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+.repo h3 svg { width: 14px; height: 14px; flex: none; color: var(--text-muted); }
+.repo p { font-size: var(--fs-sm); color: var(--text-muted); margin: 0; }
+/* Selector is `.repo p.repo__meta` on purpose: `.repo p` above would otherwise
+   win on specificity and kill both the auto margin (bottom-aligning the meta
+   line across a stretched grid row) and the fainter colour. */
+.repo p.repo__meta {
+  margin-top: auto;
+  padding-top: var(--s-2);
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+/* --------------------------------------------------------------------------
+   12. Teaching / Games — prose blocks
+   -------------------------------------------------------------------------- */
+.prose {
+  max-width: var(--measure);
+  font-size: clamp(1rem, 0.97rem + 0.2vw, 1.0625rem);
+  line-height: 1.72;
+  color: var(--text);
+}
+.prose a { color: var(--accent); text-decoration-color: var(--accent); }
+.prose strong { font-weight: 600; }
+
+.game { border-top: 1px solid var(--rule); padding-top: var(--s-5); }
+/* The first game has no content above it, so its rule separates nothing. */
+.game:first-child { border-top: 0; padding-top: 0; }
+.game .actions { margin: var(--s-5) 0 0; }
+
+/* --------------------------------------------------------------------------
+   13. Contact
+   -------------------------------------------------------------------------- */
+.contact-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  margin: var(--s-5) 0 0;
+  max-width: 40rem;
+}
+.contact-list li { border-top: 1px solid var(--rule); }
+.contact-list li:last-child { border-bottom: 1px solid var(--rule); }
+.contact-list a {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-height: 52px;
+  padding: 0.5rem 0.25rem;
+  text-decoration: none;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  overflow-wrap: anywhere;
+}
+.contact-list a:hover { color: var(--accent); }
+.contact-list svg { width: 18px; height: 18px; flex: none; color: var(--text-muted); }
+.contact-list a:hover svg { color: var(--accent); }
+.contact-list .arrow { margin-left: auto; color: var(--rule-strong); flex: none; }
+.contact-list a:hover .arrow { color: var(--accent); }
+
+/* --------------------------------------------------------------------------
+   14. Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding-block: var(--s-6);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+.site-footer p { margin: 0; }
+.site-footer a { color: var(--accent); text-decoration-color: var(--accent); }
+.site-footer a:hover { color: var(--accent); }
+
+/* --------------------------------------------------------------------------
+   15. Motion — reveal-on-scroll is opt-in
+   CSS only hides .reveal under .has-reveal, and main.js adds that class only
+   when motion is allowed AND IntersectionObserver exists. No-JS and
+   reduced-motion visitors therefore never meet an invisible element.
+   -------------------------------------------------------------------------- */
+.has-reveal .reveal {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.has-reveal .reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 0.65, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .has-reveal .reveal,
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   16. Print — plain black on white, no chrome, no washes
+   -------------------------------------------------------------------------- */
+@media print {
+  :root {
+    --bg: #fff;
+    --bg-elev: #fff;
+    --bg-chip: #fff;
+    --text: #000;
+    --text-strong: #000;
+    --text-muted: #222;
+    --text-faint: #333;
+    --rule: #bbb;
+    --rule-strong: #999;
+    --accent: #000;
+    --accent-2: #000;
+    --accent-2-wash: transparent;
+  }
+  body { background: #fff; color: #000; font-size: 10.5pt; }
+  .site-header,
+  .nav__panel,
+  .skip-link,
+  .icon-btn,
+  .social,
+  .actions,
+  .hero__bg,
+  .hero__portrait { display: none !important; }
+  /* Flatten the rail layout to a single block flow. */
+  .section__grid { display: block; }
+  .section__head { position: static !important; margin-bottom: 1rem; }
+  .section, .card, .repo, .pub, .skill-group, .role { break-inside: avoid; }
+  a { text-decoration: none; color: #000; }
+  /* Neutralise every tinted surface, chip, badge and accent edge. */
+  .metric,
+  .chips li,
+  .tags li,
+  .skill-list li,
+  .pub--starred {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #999;
+  }
+  .metric { border-left: 1px solid #000; }
+  .skill-list li:first-child { border-left: 1px solid #000; }
+  .pub--starred { margin-inline: 0; padding-inline: 0; border: 0; border-top: 1px solid #999; }
+  .has-reveal .reveal { opacity: 1 !important; transform: none !important; }
+}

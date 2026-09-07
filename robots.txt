@@ -1,0 +1,5 @@
+# onurbarut.github.io — a single static page; everything here is public.
+User-agent: *
+Allow: /
+
+Sitemap: https://onurbarut.github.io/sitemap.xml

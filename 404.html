@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — Onur Barut</title>
+<meta name="description" content="That page does not exist on onurbarut.github.io.">
+<meta name="robots" content="noindex">
+<!-- 404.html does not load main.js, so the theme-colour has to be correct
+     statically in both palettes. -->
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131312" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/style.css">
+
+<script>
+  /* Same theme bootstrap as the home page, so a 404 never flashes the wrong palette. */
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search).get('theme');
+      var stored = null;
+      try { stored = localStorage.getItem('ob-theme'); } catch (e) { stored = null; }
+      var t = (q === 'light' || q === 'dark') ? q
+            : (stored === 'light' || stored === 'dark') ? stored : null;
+      if (t) {
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.style.colorScheme = t;
+      }
+    } catch (e) { /* no-op: the CSS default palette applies */ }
+  })();
+</script>
+
+<style>
+  /* The 404 is a single centred panel; it borrows every token from style.css. */
+  .notfound {
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    padding-block: var(--s-8);
+  }
+  .notfound__code {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--s-3);
+  }
+  .notfound h1 {
+    font-size: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--s-4);
+  }
+  .notfound p {
+    max-width: 34rem;
+    color: var(--text-muted);
+    margin-bottom: var(--s-6);
+  }
+</style>
+</head>
+<body>
+
+<main class="notfound" id="main" tabindex="-1">
+  <div class="wrap">
+    <span class="notfound__code">Error 404</span>
+    <h1>This page does not exist.</h1>
+    <p>The address you followed is not part of this site — it may have been renamed, or the link may be out of date.</p>
+    <div class="actions">
+      <a class="btn btn--primary" href="/">Back to the home page</a>
+      <a class="btn btn--ghost" href="/#contact">Get in touch</a>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Onur Barut · Built with plain HTML/CSS/JS · <a href="https://github.com/onurbarut/onurbarut.github.io">Source on GitHub</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

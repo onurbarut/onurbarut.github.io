@@ -1,1 +1,10 @@
+# Jekyll build output (kept from the previous setup; nothing generates it now)
 _site/
+.jekyll-cache/
+
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
