@@ -1136,3 +1136,10 @@ img { max-width: 100%; height: auto; display: block; }
   .pub--starred { margin-inline: 0; padding-inline: 0; border: 0; border-top: 1px solid #999; }
   .has-reveal .reveal { opacity: 1 !important; transform: none !important; }
 }
+
+/* Current work uses the same palette and typography as the portfolio. */
+.availability { margin-block: var(--s-4); font-weight: 600; }
+.updates { list-style: none; padding: 0; margin: 0; }
+.updates li { border-top: 1px solid var(--rule); padding-block: var(--s-3); }
+.updates .micro { color: var(--accent); }
+.updates p { margin: var(--s-1) 0 0; }

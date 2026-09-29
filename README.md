@@ -3,7 +3,7 @@
 Personal site for **Onur Barut, PhD** — Lead Machine Learning Engineer (Applied AI, GenAI & Search).
 Live at [onurbarut.github.io](https://onurbarut.github.io).
 
-A single static page (`index.html`) covering About, Selected work, Experience, Skills,
+A single static page (`index.html`) covering About, Now, Building, Selected work, Experience, Skills,
 Publications, Open source, Teaching, Games and Contact, plus the **Wizardic Quest** browser
 game under `games/`.
 
@@ -54,3 +54,11 @@ robots.txt                 allow all
   a hidden element.
 - **Budget** — CSS + JS together stay under 60 KB, and no third-party JavaScript ships.
 - After editing the script, check it still parses: `node --check assets/js/main.js`.
+
+## Updating current work
+
+The Now section is a dated snapshot, not a launch history. When refreshing it,
+update its date, the footer and the homepage sitemap date together. Keep project
+claims grounded in confirmed details; add public product/repository links when
+available. Teaching dates describe past work until a new term is confirmed.
+The `/games/` landing page links to the playable Wizardic Quest prototype.

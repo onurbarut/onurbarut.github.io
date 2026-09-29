@@ -65,7 +65,7 @@
   "email": "mailto:onurbarut@windowslive.com",
   "worksFor": {
     "@type": "Organization",
-    "name": "Wizard Commerce"
+    "name": "Wizard AI"
   },
   "alumniOf": [
     { "@type": "CollegeOrUniversity", "name": "University of Massachusetts Lowell" },
@@ -109,14 +109,12 @@
       </a>
 
       <ul class="nav__links" role="list" data-nav>
+        <li><a href="#now">Now</a></li>
+        <li><a href="#building">Building</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#highlights">Selected work</a></li>
         <li><a href="#experience">Experience</a></li>
-        <li><a href="#skills">Skills</a></li>
         <li><a href="#publications">Publications</a></li>
-        <li><a href="#open-source">Open source</a></li>
-        <li><a href="#teaching">Teaching</a></li>
-        <li><a href="#games">Games</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
 
@@ -150,6 +148,8 @@
   <nav class="nav__panel" id="nav-panel" aria-label="Primary menu" hidden>
     <div class="wrap">
       <ul data-nav role="list">
+        <li><a href="#now">Now</a></li>
+        <li><a href="#building">Building</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#highlights">Selected work</a></li>
         <li><a href="#experience">Experience</a></li>
@@ -178,14 +178,16 @@
           <h1 class="hero__name" id="hero-name">Onur Barut, PhD</h1>
           <p class="hero__kicker">Lead ML Engineer · Applied AI, GenAI &amp; Search</p>
 
-          <p class="hero__lead">I build LLM systems that run unattended at catalog scale and can prove their own quality — enrichment platforms, retrieval-plus-LLM classification, embedding pipelines, and the evaluation harnesses that gate every model change. Before that I was an AI Software Architect at Intel and a PhD researcher in deep learning for network security.</p>
+          <p class="hero__lead">I build and evaluate production AI systems at scale — from multimodal models and hybrid retrieval to agents, inference infrastructure, typed data contracts, and evaluation. At Wizard AI, I lead product intelligence across a catalog of 70M+ products, making AI workflows measurable, reliable, and ready for production.</p>
 
           <ul class="chips" role="list">
             <li>PhD, UMass Lowell</li>
             <li>8+ years in ML</li>
             <li>Catalog-scale GenAI · 100+ retailer feeds</li>
-            <li>Adjunct faculty, Clark University (Fall 2025)</li>
+            <li>Graduate GenAI course developer · Clark University</li>
           </ul>
+
+          <p class="availability"><a href="#contact">Open to Staff / Lead roles in applied AI</a></p>
 
           <div class="actions">
             <a class="btn btn--primary" href="assets/Onur_Barut_CV.pdf" download="Onur_Barut_CV.pdf">
@@ -241,7 +243,64 @@
         <h2 class="section__title" id="about-title">About</h2>
       </div>
       <div>
-        <p class="about__body">I build production AI systems that run unattended at scale and can prove their own quality. Today I am the Lead Machine Learning Engineer at Wizard Commerce, where I own the AI catalog-enrichment platform: the categories, typed attributes, summaries and embeddings behind a search index of tens of millions of listings assembled from 100+ retailer feeds. Most of my work sits where large language models meet retrieval and data quality — structured-output extraction, hybrid search, embedding pipelines, orchestration on Airflow and Cloud Run, and evaluation harnesses that decide which model actually ships. Before Wizard I was an AI Software Architect at Intel, working on multimodal RAG, VLM-generated synthetic data and hardware-aware inference optimization, and I earned my PhD in Computer Engineering at UMass Lowell for transformer-based network security models. I also developed a graduate generative AI course for Clark University. I am open to new opportunities — Staff or Lead roles in applied AI, GenAI, and search and recommendations.</p>
+        <p class="about__body">I build and evaluate production AI systems at scale — spanning multimodal models, retrieval, agents, inference infrastructure, typed data contracts, and evaluation. At Wizard AI, I lead product intelligence across a catalog of 70M+ products from heterogeneous retail feeds. The platform combines text and images with hybrid BM25 and vector retrieval, schema-constrained generation, and deterministic verification to improve categorization, attribute enrichment, entity mapping, and catalog quality. I focus on making model quality measurable and systems dependable: frozen evaluation sets, regression gates, cost and latency comparisons, and reconciliation checks that catch data lost between pipeline stages. Before Wizard I was an AI Software Architect at Intel, working on multimodal RAG, VLM-generated synthetic data, and hardware-aware inference. I earned my PhD in Computer Engineering at UMass Lowell and developed a graduate generative AI course for Clark University. I am open to Staff or Lead roles in applied AI, GenAI, and search and recommendations.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="now" aria-labelledby="now-title">
+    <div class="wrap section__grid">
+      <div class="section__head">
+        <span class="micro section__index">02</span>
+        <h2 class="section__title" id="now-title">Now</h2>
+      </div>
+      <div>
+        <p class="standfirst">A snapshot of what I’m building and sharing, updated <time datetime="2026-09-29">September 29, 2026</time>.</p>
+        <ul class="updates" role="list">
+          <li><span class="micro">Building</span><p><a href="#flipmap">FlipMap</a> — a web product built with Next.js and server-sent events.</p></li>
+          <li><span class="micro">Research</span><p><a href="#market-tooling">Market-structure tooling</a> — structural-arbitrage scanning and a five-pillar premarket scanner.</p></li>
+          <li><span class="micro">Exploring</span><p><a href="#ai-chemist">AI Chemist LLC</a> — vending pilots and hands-on product experimentation.</p></li>
+          <li><span class="micro">Sharing</span><p><a href="https://github.com/onurbarut/MSIT3103-GenAI-assignments">Graduate GenAI notebooks</a> — public exercises from the course I developed for Clark University.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="building" aria-labelledby="building-title">
+    <div class="wrap section__grid">
+      <div class="section__head">
+        <span class="micro section__index">03</span>
+        <h2 class="section__title" id="building-title">Building</h2>
+      </div>
+      <div>
+        <p class="standfirst">Beyond production ML: independent products, quantitative tooling and interactive experiments.</p>
+        <ul class="repos" role="list">
+          <li class="repo reveal" id="flipmap">
+            <h3>FlipMap</h3>
+            <p>A web product built with Next.js and server-sent events, extending my work on streaming systems into an independent product.</p>
+            <p class="repo__meta">Product engineering · Next.js · SSE</p>
+          </li>
+          <li class="repo reveal" id="market-tooling">
+            <h3>Kalshi structural-arbitrage scanner</h3>
+            <p>Quantitative tooling for investigating relationships between prediction markets and identifying structural pricing discrepancies.</p>
+            <p class="repo__meta">Market-structure research · Prediction markets</p>
+          </li>
+          <li class="repo reveal">
+            <h3>Five-pillar premarket scanner</h3>
+            <p>A premarket research scanner that organizes signals into a five-pillar framework for review.</p>
+            <p class="repo__meta">Quantitative tooling · Research workflow</p>
+          </li>
+          <li class="repo reveal" id="ai-chemist">
+            <h3>AI Chemist LLC</h3>
+            <p>An entrepreneurial venture exploring vending pilots, taking product experimentation beyond software.</p>
+            <p class="repo__meta">Entrepreneurship · Vending pilots</p>
+          </li>
+          <li class="repo reveal">
+            <h3><a href="games/wizardic_quest/">Wizardic Quest</a></h3>
+            <p>A playable browser game with exploration, combat, inventory and daily quests. A playground for rendering and game-loop experiments.</p>
+            <p class="repo__meta">HTML5 Canvas · ES modules · Playable prototype</p>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
@@ -252,19 +311,19 @@
   <section class="section" id="highlights" aria-labelledby="highlights-title">
     <div class="wrap section__grid">
       <div class="section__head">
-        <span class="micro section__index">02</span>
+        <span class="micro section__index">04</span>
         <h2 class="section__title" id="highlights-title">Selected work</h2>
       </div>
       <div>
-        <p class="standfirst">Platform, model and data-quality work behind a catalog search index of tens of millions of listings. Company-internal names, customers and systems are deliberately omitted.</p>
+        <p class="standfirst">Platform, model and data-quality work for product intelligence across a catalog of 70M+ products. Company-internal names, customers and systems are deliberately omitted.</p>
 
         <ul class="cards" role="list">
           <li class="card reveal">
             <h3 class="card__title">AI catalog enrichment platform</h3>
             <p class="metric"><span class="metric__dot" aria-hidden="true"></span><span>51 registered job types</span></p>
-            <p class="card__body">Owner and primary author of two successive generations of the service that turns raw retailer feeds into search-ready categories, typed attributes, summaries and embeddings. Took it from research-grade code with manual file handoffs to a job framework that runs whole-catalog campaigns unattended and is ingested continuously by the data platform.</p>
+            <p class="card__body">Owner and primary author of successive generations of the service that turns heterogeneous retailer feeds into search-ready categories, typed attributes, summaries and embeddings. The distributed pipeline combines multimodal inputs, schema-constrained generation, batch inference and deterministic validation. It has processed roughly 3–4 million product enrichments in about two weeks during large runs, and now runs whole-catalog campaigns unattended with continuous downstream ingestion.</p>
             <ul class="tags" role="list">
-              <li>Python 3.12</li><li>asyncio</li><li>Pydantic</li><li>Cloud Run</li><li>Parquet</li>
+              <li>Python</li><li>FastAPI</li><li>Celery</li><li>Pydantic v2</li><li>Spark</li><li>Airflow</li><li>Parquet</li><li>GCS</li><li>Cloud Run</li>
             </ul>
           </li>
 
@@ -274,6 +333,33 @@
             <p class="card__body">Owned LLM product categorization into a ~6,100-leaf taxonomy across three engine generations, ending hallucinated category paths by generating strict Literal-typed response schemas over retrieved candidates. Replayed an operations error set into a repeatable evaluation loop: on a separate 138-product operations error set, exact-category fixes rose 20 → 39 and right-department fixes 33 → 78 with zero regressions. A controlled A/B on 1,199 random listings with retrieval held fixed lifted agreement with production labels 90.2% → 91.0% (19 wins, 9 losses).</p>
             <ul class="tags" role="list">
               <li>Structured outputs</li><li>Hybrid retrieval</li><li>Elasticsearch</li><li>vLLM</li><li>OpenAI Batch API</li>
+            </ul>
+          </li>
+
+          <li class="card reveal">
+            <h3 class="card__title">Multimodal product recategorization</h3>
+            <p class="metric"><span class="metric__dot" aria-hidden="true"></span><span>~79% → ~91% on a curated evaluation set</span></p>
+            <p class="card__body">Combined product text, images, metadata, embeddings and hybrid retrieval to improve category assignment. Candidate retrieval narrows the decision space; schema-constrained model output and deterministic checks keep results grounded and valid.</p>
+            <ul class="tags" role="list">
+              <li>Vision-language models</li><li>Elasticsearch BM25 + kNN</li><li>RRF</li><li>Typed outputs</li>
+            </ul>
+          </li>
+
+          <li class="card reveal">
+            <h3 class="card__title">Catalog audit agent</h3>
+            <p class="metric"><span class="metric__dot" aria-hidden="true"></span><span>359 labeled cases · 18 agent-only wins vs 5 workflow-only</span></p>
+            <p class="card__body">Designed an agent for evidence gathering, with deterministic code retaining input validation, evidence grounding, verification, policy enforcement and routing. Compared the agent and workflow baseline using the same tools and policies: paired correctness favored the agent (p ≈ 0.011), and on 110 clean products it produced 5 false flags versus 15 for the workflow.</p>
+            <ul class="tags" role="list">
+              <li>Agent evaluation</li><li>Tool use</li><li>Paired analysis</li><li>False-positive measurement</li>
+            </ul>
+          </li>
+
+          <li class="card reveal">
+            <h3 class="card__title">Typed contracts and data integrity</h3>
+            <p class="metric"><span class="metric__dot" aria-hidden="true"></span><span>Found a schema mismatch dropping ~81% of batch values</span></p>
+            <p class="card__body">Connected Pydantic, Spark and Parquet stages with explicit schema checks, row and value reconciliation, serialization regression coverage, and quarantine paths. The incident showed why job completion alone is not proof that intended information survived the pipeline.</p>
+            <ul class="tags" role="list">
+              <li>Pydantic</li><li>Spark</li><li>Parquet</li><li>Data contracts</li><li>Reconciliation</li>
             </ul>
           </li>
 
@@ -289,7 +375,7 @@
           <li class="card reveal">
             <h3 class="card__title">Orchestration and release ownership</h3>
             <p class="metric"><span class="metric__dot" aria-hidden="true"></span><span>2× batches in flight (50 → 100)</span></p>
-            <p class="card__body">Took over the enrichment DAG family in the data-engineering team's Airflow repository across roughly 100 pull requests: retailer and sample-size filters, and an idempotent Cloud Run operator that persists the operation name and re-attaches to an in-flight job on retry. Diagnosed that DAG limits and pools ignore deferred tasks — the limits looked correct but bounded nothing — and shipped per-backend pools.</p>
+            <p class="card__body">Took over the enrichment DAG family in the data-engineering team's Airflow repository across roughly 100 pull requests. Improved filters and per-backend concurrency, and built an idempotent Cloud Run operator that persists the operation name and re-attaches to an in-flight job on retry. Diagnosed that DAG limits and pools ignore deferred tasks — the limits looked correct but bounded nothing — and shipped per-backend pools.</p>
             <ul class="tags" role="list">
               <li>Apache Airflow</li><li>Cloud Composer</li><li>Cloud Run</li><li>PySpark</li><li>pytest</li>
             </ul>
@@ -298,7 +384,7 @@
           <li class="card reveal">
             <h3 class="card__title">Open-weight models, chosen on evidence</h3>
             <p class="metric"><span class="metric__dot" aria-hidden="true"></span><span>Self-hosted 35B edged GPT-4.1-nano, 0.714 vs 0.698</span></p>
-            <p class="card__body">Led the move of catalog enrichment from per-token vendor APIs to self-hosted open-weight models (Qwen3 / 3.5 / VL, GPT-OSS, Gemma on vLLM behind a LiteLLM gateway), landing a 68-file, ~20.7k-line integration, keeping the vendor batch path as a pluggable fallback, and holding production up through a compute-capacity interruption by re-pointing a live job to an external GPU-cloud model on a two-line config change. Models were picked on benchmark evidence — a config-driven LLM-as-judge harness (severity rubrics, strict-JSON verdicts, coverage, agreement, defect-rate and cost metrics, text and vision judging) alongside reference-free heuristic rubrics, which showed an 8B open-weight model matching an 80B one on 754-variant name normalization and quantified an open-weight VLM hallucinating numeric specs ~3× more often (4.4% vs 1.4%).</p>
+            <p class="card__body">Led the move of catalog enrichment from per-token vendor APIs to self-hosted open-weight models (Qwen3 / 3.5 / VL, GPT-OSS, Gemma on vLLM behind a LiteLLM gateway), landing a 68-file, ~20.7k-line integration, keeping the vendor batch path as a pluggable fallback, and holding production up through a compute-capacity interruption by re-pointing a live job to an external GPU-cloud model on a two-line config change. Models were picked as an evaluation problem, not a demo: frozen and held-out sets, per-category slices, severity-weighted regression gates, structured-output and evidence checks, judge calibration, and latency and cost comparisons. A calibrated text-and-vision judge plus reference-free rubrics showed an 8B open-weight model matching an 80B on 754-variant name normalization and an open-weight VLM producing numeric hallucinations about 3× as often (4.4% vs 1.4%), prompting additional numeric safeguards.</p>
             <ul class="tags" role="list">
               <li>vLLM</li><li>LiteLLM</li><li>Qwen3 / Qwen3-VL</li><li>GPT-OSS</li><li>LLM-as-judge</li>
             </ul>
@@ -350,16 +436,16 @@
   <section class="section" id="experience" aria-labelledby="experience-title">
     <div class="wrap section__grid">
       <div class="section__head">
-        <span class="micro section__index">03</span>
+        <span class="micro section__index">05</span>
         <h2 class="section__title" id="experience-title">Experience</h2>
       </div>
       <div>
         <ol class="timeline" role="list">
 
           <li class="role">
-            <h3 class="role__title"><span class="role__org">Wizard Commerce</span> <span class="role__sep">—</span> <span class="role__position">Lead Machine Learning Engineer</span></h3>
+            <h3 class="role__title"><span class="role__org">Wizard AI</span> <span class="role__sep">—</span> <span class="role__position">Lead Machine Learning Engineer</span></h3>
             <p class="micro role__meta">Oct 2024 – Present · Remote · MA</p>
-            <p class="role__context">AI shopping company. Owner of the AI catalog-enrichment platform: categories, typed attributes, summaries and embeddings for a search index of tens of millions of listings built from 100+ retailer feeds.</p>
+            <p class="role__context">AI shopping company. Owner of the AI catalog-enrichment platform: categories, typed attributes, summaries and embeddings for a search index of 70M+ products from heterogeneous retailer feeds.</p>
             <ul class="bullets">
               <li>Owned the AI catalog-enrichment platform across two service generations and three repositories, taking it from a research-grade service with manual file handoffs to a job framework of 51 registered jobs that runs whole-catalog campaigns unattended and is ingested continuously by the data platform.</li>
               <li>Led the migration of catalog enrichment from per-token vendor APIs to self-hosted open-weight models (Qwen3 / 3.5 / VL, GPT-OSS, Gemma on vLLM behind a LiteLLM gateway), selecting each model on benchmark evidence — a self-hosted 35B model edged GPT-4.1-nano on a 381-variant summary benchmark (0.714 vs 0.698) — keeping the vendor batch API as a pluggable fallback, and holding production up through a compute-capacity interruption by re-pointing a live job to an external GPU-cloud model on a two-line config change.</li>
@@ -386,7 +472,7 @@
             <p class="micro role__meta">Jun 2022 – Oct 2024 · Remote / MA</p>
             <ul class="bullets">
               <li>Generated synthetic data with a vision-language model to fine-tune a smaller language model for document question answering.</li>
-              <li>Trained and open-sourced a multi-modal visual RAG model on a LLaMA backbone for retail security.</li>
+              <li>Built a video-understanding proof of concept for retail video analytics: created and annotated a task-specific dataset, fine-tuned VideoLLaMA, generated AdaCLIP video embeddings, indexed them in VDMS, and retrieved relevant segments for natural-language queries. Also trained and open-sourced a multimodal visual RAG model on a LLaMA backbone.</li>
               <li>Designed and open-sourced deep learning models for network-AI projects and optimized them for Intel hardware against customer compute budgets, reported at up to 50% higher throughput.</li>
               <li>Developed and open-sourced a video super-resolution model reported at +2% PSNR with reduced artifacts at minimal additional compute cost.</li>
               <li>Led research on network security and video quality enhancement, publishing and presenting more than five papers internally and externally.</li>
@@ -452,7 +538,7 @@
   <section class="section" id="skills" aria-labelledby="skills-title">
     <div class="wrap section__grid">
       <div class="section__head">
-        <span class="micro section__index">04</span>
+        <span class="micro section__index">06</span>
         <h2 class="section__title" id="skills-title">Skills</h2>
       </div>
       <div>
@@ -595,7 +681,7 @@
   <section class="section" id="publications" aria-labelledby="publications-title">
     <div class="wrap section__grid">
       <div class="section__head">
-        <span class="micro section__index">05</span>
+        <span class="micro section__index">07</span>
         <h2 class="section__title" id="publications-title">Publications</h2>
       </div>
       <div>
@@ -755,7 +841,7 @@
   <section class="section" id="open-source" aria-labelledby="open-source-title">
     <div class="wrap section__grid">
       <div class="section__head">
-        <span class="micro section__index">06</span>
+        <span class="micro section__index">08</span>
         <h2 class="section__title" id="open-source-title">Open source</h2>
       </div>
       <div>
@@ -814,7 +900,7 @@
   <section class="section" id="teaching" aria-labelledby="teaching-title">
     <div class="wrap section__grid">
       <div class="section__head">
-        <span class="micro section__index">07</span>
+        <span class="micro section__index">09</span>
         <h2 class="section__title" id="teaching-title">Teaching</h2>
       </div>
       <div>
@@ -829,7 +915,7 @@
   <section class="section" id="games" aria-labelledby="games-title">
     <div class="wrap section__grid">
       <div class="section__head">
-        <span class="micro section__index">08</span>
+        <span class="micro section__index">10</span>
         <h2 class="section__title" id="games-title">Games</h2>
       </div>
       <div>
@@ -852,7 +938,7 @@
   <section class="section" id="contact" aria-labelledby="contact-title">
     <div class="wrap section__grid">
       <div class="section__head">
-        <span class="micro section__index">09</span>
+        <span class="micro section__index">11</span>
         <h2 class="section__title" id="contact-title">Contact</h2>
       </div>
       <div>
@@ -899,7 +985,7 @@
      ====================================================================== -->
 <footer class="site-footer">
   <div class="wrap">
-    <p>© 2026 Onur Barut · Built with plain HTML/CSS/JS · <a href="https://github.com/onurbarut/onurbarut.github.io">Source on GitHub</a></p>
+    <p>© 2026 Onur Barut · Last updated <time datetime="2026-09-29">September 2026</time> · Built with plain HTML/CSS/JS · <a href="https://github.com/onurbarut/onurbarut.github.io">Source on GitHub</a></p>
   </div>
 </footer>
 
